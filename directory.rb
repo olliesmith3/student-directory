@@ -4,8 +4,12 @@ def input_students
   students = []
   name = gets.chomp
   while !name.empty? do
-    students << {name: name, cohort: :november}
+    puts "how old are they?"
+    age = gets.chomp
+    students << {name: name, cohort: :november, age: age}
     puts "Now we have #{students.count} students"
+    puts "Please enter the names of the students"
+    puts "To finish, just hit return twice"
     name = gets.chomp
   end
   students
@@ -16,11 +20,7 @@ def print_header
 end
 def print(students)
   students.each_with_index do |student, index|
-    if student[:name][0] == "A" && student[:name].size < 12
-      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
-    else
-      puts "Their name does not begin with A"
-    end
+    puts "#{index + 1}. #{student[:name]}, age #{student[:age]} (#{student[:cohort]} cohort)".center(40)
   end
 end
 def print_footer(names)
