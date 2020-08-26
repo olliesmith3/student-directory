@@ -6,6 +6,9 @@ def input_students
   while !name.empty? do
     puts "how old are they?"
     age = gets.chomp
+    if age == ""
+      age = 
+    end
     students << {name: name, cohort: :november, age: age}
     puts "Now we have #{students.count} students"
     puts "Please enter the names of the students"
