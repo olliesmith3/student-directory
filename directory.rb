@@ -1,4 +1,4 @@
-@students = [] # an empty array accessible to all methods
+@students = []
 
 def add_to_students(name, cohort)
   @students << {name: name, cohort: cohort.to_sym, place_of_birth: :UK}
@@ -7,9 +7,7 @@ end
 def input_students
   puts "Please enter the names of the students".center(100)
   puts "To finish, just hit return twice".center(100)
-  # get the first name
   name = STDIN.gets.chomp
-  # while the name is not empty, repeat this code
   while !name.empty? do
     puts "Which cohort are they in?".center(100)
     cohort = STDIN.gets.chop.to_sym
@@ -18,11 +16,7 @@ def input_students
       cohort = :unknown
     end
     add_to_students(name, cohort)
-    if @students.count == 1
-      puts "Now we have #{@students.count} student".center(100)
-    else
-      puts "Now we have #{@students.count} students".center(100)
-    end
+    puts @students.count == 1 ? "Now we have #{@students.count} student".center(100) : "Now we have #{@students.count} students".center(100) 
     puts "Please enter the name of another student or press enter to finish".center(100)
     name = STDIN.gets.chop
   end
@@ -42,7 +36,7 @@ def print_menu
   puts "2. Show the students"
   puts "3. Save the list to students.csv"
   puts "4. Load the list from students.csv"
-  puts "9. Exit" # 9 because we'll be adding more items
+  puts "9. Exit"
 end
 
 def show_students
@@ -58,11 +52,15 @@ def process(selection)
   when "2"
     show_students
   when "3"
-    save_students
+    puts "Which file would you like to save students to?"
+    save_students(gets.chomp)
+    puts "Those students have been saved".center(100)
   when "4"
-    load_students
+    puts "Which file would you like to load students from?"
+    load_students(gets.chomp)
+    puts "Students have been loaded".center(100)
   when "9"
-    exit # this will cause the program to terminate
+    exit 
   else
     puts "I don't know what you meant, try again"
   end
@@ -105,30 +103,30 @@ def print_footer
   end
 end
 
-def save_students
-  file = File.open("students.csv", "w")
+def save_students(filename = "students.csv")
+  file = File.open(filename, "w") { |file|
   @students.each do |student|
     student_data = [student[:name], student[:cohort]]
     csv_line = student_data.join(",")
     file.puts csv_line
   end
-  file.close
+  }
 end
 
 def load_students(filename = "students.csv")
-  file = File.open(filename, "r")
+  file = File.open(filename, "r") { |file|
   file.readlines.each do |line|
     name, cohort = line.chomp.split(",")
     add_to_students(name, cohort)
   end
-  file.close
+  }
 end
 
 def try_load_students
   filename = ARGV.first
-  if filename.nil?
-    filename = "students.csv"
-  end
+  #if filename.nil?
+  #  filename = "students.csv"
+  #end
   return if filename.nil?
   if File.exists?(filename)
     load_students(filename)
