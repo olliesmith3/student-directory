@@ -20,9 +20,22 @@ def print_header
   puts "The students of Villains Academy"
   puts "-------------"
 end
-def print(students)
-  students.each_with_index do |student, index|
-    puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort) born in #{student[:place_of_birth]}".center(60)
+#def print(students)
+#  students.each_with_index do |student, index|
+#    puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort) born in #{student[:place_of_birth]}".center(60)
+#  end
+#end
+def group(students)
+  cohorts = []
+  students.each do |student|
+    cohorts << student[:cohort]
+  end
+  cohorts.uniq.each do |cohort|
+    students.each do |student|
+      if cohort == student[:cohort]
+        puts "#{student[:name]} (#{student[:cohort]} cohort)"
+      end
+    end  
   end
 end
 def print_footer(students)
@@ -31,5 +44,6 @@ end
 #nothing happens until we call the methods
 students = input_students
 print_header
-print(students)
+#print(students)
+group(students)
 print_footer(students)
