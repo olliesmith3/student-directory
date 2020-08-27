@@ -2,17 +2,17 @@ def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
   students = []
-  name = gets.chomp
+  name = gets.chop
   while !name.empty? do
     puts "Which cohort are they in?"
-    cohort = gets.chomp.to_sym
+    cohort = gets.chop.to_sym
     months = [:Janurary, :February, :March, :April, :May, :June, :July, :August, :September, :October, :November, :December]
     if !months.include? cohort
       cohort = :unknown
     end
     students << {name: name, cohort: cohort, place_of_birth: :UK}
     puts "Now we have #{students.count} students"
-    name = gets.chomp
+    name = gets.chop
   end
   students
 end
