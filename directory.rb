@@ -1,29 +1,25 @@
-def input_students
-  puts "Please enter the names of the students"
-  puts "To finish, just hit return twice"
-  students = []
-  name = gets.chomp
-  while !name.empty? do
-    puts "how old are they?"
-    age = gets.chomp
-    if age == ""
-      age = 
-    end
-    students << {name: name, cohort: :november, age: age}
-    puts "Now we have #{students.count} students"
-    puts "Please enter the names of the students"
-    puts "To finish, just hit return twice"
-    name = gets.chomp
-  end
-  students
-end
+students = [
+  "The students of Villains Academy",
+  "-------------",
+  "Dr. Hannibal Lecter",
+  "Darth Vader",
+  "Nurse Ratched",
+  "Michael Corleone",
+  "Alex DeLarge",
+  "The Wicked Witch of the West",
+  "Terminator",
+  "Freddy Krueger",
+  "The Joker",
+  "Joffrey Baratheon",
+  "Norman Bates"
+]
 def print_header
   puts "The students of Villains Academy"
   puts "-------------"
 end
-def print(students)
-  students.each_with_index do |student, index|
-    puts "#{index + 1}. #{student[:name]}, age #{student[:age]} (#{student[:cohort]} cohort)".center(40)
+def print(names)
+  names.each do |name|
+    puts name
   end
 end
 def print_footer(names)
