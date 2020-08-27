@@ -1,3 +1,5 @@
+require "csv"
+
 @students = []
 
 def add_to_students(name, cohort)
@@ -36,6 +38,7 @@ def print_menu
   puts "2. Show the students"
   puts "3. Save the list to students.csv"
   puts "4. Load the list from students.csv"
+  puts "5. Print source code"
   puts "9. Exit"
 end
 
@@ -59,6 +62,8 @@ def process(selection)
     puts "Which file would you like to load students from?"
     load_students(gets.chomp)
     puts "Students have been loaded".center(100)
+  when "5"
+    print_source_code
   when "9"
     exit 
   else
@@ -104,21 +109,17 @@ def print_footer
 end
 
 def save_students(filename = "students.csv")
-  file = File.open(filename, "w") { |file|
+  CSV.open(filename, "w") { |csv|
   @students.each do |student|
-    student_data = [student[:name], student[:cohort]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
+    csv << [student[:name], student[:cohort]]
   end
   }
 end
 
 def load_students(filename = "students.csv")
-  file = File.open(filename, "r") { |file|
-  file.readlines.each do |line|
-    name, cohort = line.chomp.split(",")
+  CSV.foreach(filename) { |row|
+    name, cohort = row
     add_to_students(name, cohort)
-  end
   }
 end
 
@@ -135,6 +136,11 @@ def try_load_students
     puts "Sorry, #{filename} doesn't exist."
     exit
   end
+end
+
+def print_source_code
+  puts "Source code for directory.rb"
+  puts File.open(__FILE__, "r").read
 end
 
 try_load_students
