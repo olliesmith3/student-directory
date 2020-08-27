@@ -1,31 +1,81 @@
+@students = [] # an empty array accessible to all methods
+
 def input_students
-  puts "Please enter the names of the students"
-  puts "To finish, just hit return twice"
-  students = []
-  name = gets.chop
+  puts "Please enter the names of the students".center(100)
+  puts "To finish, just hit return twice".center(100)
+  # get the first name
+  name = gets.chomp
+  # while the name is not empty, repeat this code
   while !name.empty? do
-    puts "Which cohort are they in?"
+    puts "Which cohort are they in?".center(100)
     cohort = gets.chop.to_sym
     months = [:Janurary, :February, :March, :April, :May, :June, :July, :August, :September, :October, :November, :December]
     if !months.include? cohort
       cohort = :unknown
     end
-    students << {name: name, cohort: cohort, place_of_birth: :UK}
-    puts "Now we have #{students.count} students"
+    @students << {name: name, cohort: cohort, place_of_birth: :UK}
+    if @students.count == 1
+      puts "Now we have #{@students.count} student".center(100)
+    else
+      puts "Now we have #{@students.count} students".center(100)
+    end
+    puts "Please enter the name of another student or press enter to finish".center(100)
     name = gets.chop
   end
-  students
 end
-def print_header(students)
-  if students.count != 0
-    "The students of Villains Academy\n-------------".center(60)
+
+def interactive_menu
+  loop do
+    print_menu
+    process(gets.chomp)
   end
 end
-def print(students)
-  students.each_with_index do |student, index|
-    puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort) born in #{student[:place_of_birth]}".center(60)
+
+def print_menu
+  puts "\n"
+  puts "Select the option you would like by typing the number and then pressing Enter\n\n".center(100)
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "3. Save the list to students.csv"
+  puts "9. Exit" # 9 because we'll be adding more items
+end
+
+def show_students
+  print_header
+  print_student_list
+  print_footer
+end
+
+def process(selection)
+  case selection
+  when "1"
+    input_students
+  when "2"
+    show_students
+  when "3"
+    save_students
+  when "9"
+    exit # this will cause the program to terminate
+  else
+    puts "I don't know what you meant, try again"
   end
 end
+
+def print_header
+  if @students.count != 0
+    puts "The students of Villains Academy".center(100)
+    puts "-------------".center(100)
+  else
+    puts "There are currently no students".center(100)
+  end
+end
+
+def print_student_list
+  @students.each_with_index do |student, index|
+    puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort) born in #{student[:place_of_birth]}".center(100)
+  end
+end
+
 #def group(students)
 #  cohorts = []
 #  students.each do |student|
@@ -39,16 +89,23 @@ end
 #    end  
 #  end
 #end
-def print_footer(students)
-  if students.count == 1
-    puts "Overall, we only have 1 student".center(60)
-  elsif students.count > 1
-    puts "Overall, we have #{students.count} great students".center(60)
+
+def print_footer
+  if @students.count == 1
+    puts "Overall, we only have 1 student".center(100)
+  elsif @students.count > 1
+    puts "Overall, we have #{@students.count} great students".center(100)
   end
 end
-#nothing happens until we call the methods
-students = input_students
-print_header(students)
-print(students)
-#group(students)
-print_footer(students)
+
+def save_students
+  file = File.open("students.csv", "w")
+  @students.each do |student|
+    student_data = [student[:name], student[:cohort]]
+    csv_line = student_data.join(",")
+    file.puts csv_line
+  end
+  file.close
+end
+
+interactive_menu
