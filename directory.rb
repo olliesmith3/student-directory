@@ -1,5 +1,9 @@
 @students = [] # an empty array accessible to all methods
 
+def add_to_students(name, cohort)
+  @students << {name: name, cohort: cohort.to_sym, place_of_birth: :UK}
+end
+
 def input_students
   puts "Please enter the names of the students".center(100)
   puts "To finish, just hit return twice".center(100)
@@ -13,7 +17,7 @@ def input_students
     if !months.include? cohort
       cohort = :unknown
     end
-    @students << {name: name, cohort: cohort, place_of_birth: :UK}
+    add_to_students(name, cohort)
     if @students.count == 1
       puts "Now we have #{@students.count} student".center(100)
     else
@@ -115,13 +119,16 @@ def load_students(filename = "students.csv")
   file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort = line.chomp.split(",")
-    @students << {name: name, cohort: cohort.to_sym}
+    add_to_students(name, cohort)
   end
   file.close
 end
 
 def try_load_students
   filename = ARGV.first
+  if filename.nil?
+    filename = "students.csv"
+  end
   return if filename.nil?
   if File.exists?(filename)
     load_students(filename)
